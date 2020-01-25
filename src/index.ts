@@ -1,50 +1,63 @@
-const user: {
-    readonly firstName: string;
-    readonly age?: number;
-} = {
-    firstName: 'Ihor',
-    age: 33
-};
+// // Object/Functions
+// interface IPoint {
+//     x: number;
+//     y: number;
+// }
+//
+// type Point = {
+//     x: number;
+//     y: number;
+// }
+//
+// interface ISetPoint {
+//     (x: number, y: number): void
+// }
+//
+// type SetPoint = {
+//     (x: number, y: number): void
+// }
+//
+// let point: Point = {
+//     x: 1,
+//     y: 1
+// }
+// const fn: SetPoint = (_x: number, _y: number) => {
+//     return;
+// }
 
-let key: string;
-
-let booleanMap: {
-    [key: string]: string | number
-} = {
-    name: 'Ihor',
-    age: 33
+// extends
+interface IPartialPoint {
+    x: number
 }
 
-type User = {
-    readonly firstName: string;
-    readonly age?: number;
-}
+//
+// interface IPoint extends PartialPoint {
+//     y: number
+// }
+//
+// type PartialPoint = { x: number };
+type Point = { y: number } & IPartialPoint
+//
+// let point: IPoint = {
+//     x: 1,
+//     y: 1
+// }
+//
+// // implements
+// class PointClass implements Point {
+//     x: number = 1;
+//     y: number = 1;
+// }
 
-let arr: User[] = [{
-    firstName: 'Ihor',
-    age: 33
-}, {
-    firstName: 'Ihor',
-    age: 33
-}]
-
-let arr1: ReadonlyArray<number> = [1, 2, 3];
-arr1[100] = 1;
-arr1.push(2);
-
-let tupleArr: readonly [number, string] = [1, '1'];
-tupleArr[100] = 1;
-tupleArr.push(2);
-
-let x  = 10 as const;
-let arr2 =  [10, true] as const;
-arr2 = [10, false];
-arr2[100] = 1;
-arr2.push(2);
-
-let acc = {
-    firstName: 'Ihor',
-    age: 33
-} as const;
-
-acc.age = 34
+// interface IX {
+//     x: number
+// };
+//
+// interface IX {
+//     y: number
+// };
+//
+// let point: IX = {
+//     x: 1,
+//     y: 1
+// }

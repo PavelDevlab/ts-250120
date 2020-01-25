@@ -1,63 +1,23 @@
-// // Object/Functions
-// interface IPoint {
-//     x: number;
-//     y: number;
-// }
-//
-// type Point = {
-//     x: number;
-//     y: number;
-// }
-//
-// interface ISetPoint {
-//     (x: number, y: number): void
-// }
-//
-// type SetPoint = {
-//     (x: number, y: number): void
-// }
-//
-// let point: Point = {
-//     x: 1,
-//     y: 1
-// }
-// const fn: SetPoint = (_x: number, _y: number) => {
-//     return;
-// }
+// interface/types/class/function
 
-// extends
-interface IPartialPoint {
-    x: number
+// function fn(a:number, b: number) {
+//   return a + b;
+// }
+//
+// fn(1,2)
+
+type IAccount<GeneralInfo extends { age: number }, Id = number> = {
+    id: Id,
+    info: GeneralInfo
 }
 
-//
-// interface IPoint extends PartialPoint {
-//     y: number
-// }
-//
-// type PartialPoint = { x: number };
-type Point = { y: number } & IPartialPoint
-//
-// let point: IPoint = {
-//     x: 1,
-//     y: 1
-// }
-//
-// // implements
-// class PointClass implements Point {
-//     x: number = 1;
-//     y: number = 1;
-// }
-
-// interface IX {
-//     x: number
-// };
-//
-// interface IX {
-//     y: number
-// };
-//
-// let point: IX = {
-//     x: 1,
-//     y: 1
-// }
+let admin: IAccount<{ usersId: string[], age: number }> = {
+    id: 1,
+    info: {usersId: ['1', '2', '3'], age: 19}
+}
+let user: IAccount<{ age: number }, string> = {
+    id: 'asdasd12312asd',
+    info: {
+        age: 44
+    }
+}

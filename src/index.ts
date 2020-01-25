@@ -1,23 +1,31 @@
-// interface/types/class/function
+// T extends U ? X: Y
+// No undefined
+// type NonNull<T> = T extends (undefined | null) ? never : T;
+type snun = string | null | undefined | number;
+let someValue: NonNullable<snun> = 'str';
 
-// function fn(a:number, b: number) {
-//   return a + b;
-// }
-//
-// fn(1,2)
 
-type IAccount<GeneralInfo extends { age: number }, Id = number> = {
-    id: Id,
-    info: GeneralInfo
+// First element
+type arr = [() => [number, string], number];
+
+type FirstReturnItemType<T> = T extends [infer U, ...unknown[]]
+    ? U extends (...args: unknown[]) => infer R ? R : never
+    : never
+
+let returnType: FirstReturnItemType<string> = 1;
+
+function fn(_a: number, b: number): () => true {
+    return () => true;
 }
 
-let admin: IAccount<{ usersId: string[], age: number }> = {
-    id: 1,
-    info: {usersId: ['1', '2', '3'], age: 19}
-}
-let user: IAccount<{ age: number }, string> = {
-    id: 'asdasd12312asd',
-    info: {
-        age: 44
-    }
-}
+//  FunctionParamsAndReturn
+
+type NonFunction<T> = T extends Function ? never : T;
+
+type FunctionParamsAndReturn<T> = T extends (...args: infer Args) => infer R
+    ? NonFunction<Args[keyof Args]> | R
+    : never
+
+const c: FunctionParamsAndReturn<typeof fn> = Symbol();
+
+let a: number | (() => boolean);

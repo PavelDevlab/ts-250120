@@ -1,20 +1,22 @@
-type NotReadonly<T> = {
-    -readonly [key in keyof T]: T[key]
-}
-
-type user = {
-    readonly age: number;
-    name1: string
-}
-
-let user: Partial<user> = {
-    age: 33,
-    name: 'Ihor'
-}
-
-type RemoveByType<T, E> = {
-    [key in keyof T]: E extends T[key] ? never : T[key]
-}[keyof T]
-
-let someValue: RemoveByType<typeof user, number> = true;
-
+import { generateMenu } from "./menu/menu";
+import { list } from "./menu/data";
+$('.menu')
+    .html(generateMenu(list))
+    .on('click', (e: Event)=>{
+        const el: HTMLElement = e.target as HTMLElement;
+        if (!el.classList.contains('title')) {
+            return;
+        }
+        const parentLi: HTMLLIElement = el.parentElement as HTMLLIElement;
+        parentLi.classList.toggle('menu-open');
+    })
+// const navMenu: HTMLDivElement = document.querySelector('.menu') as HTMLDivElement;
+// navMenu.innerHTML = generateMenu(list);
+// navMenu.addEventListener('click', (e: MouseEvent) => {
+//     const el: HTMLElement = e.target as HTMLElement;
+//     if (!el.classList.contains('title')) {
+//         return;
+//     }
+//     const parentLi: HTMLLIElement = el.parentElement as HTMLLIElement;
+//     parentLi.classList.toggle('menu-open');
+// })

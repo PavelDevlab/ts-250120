@@ -1,31 +1,20 @@
-// T extends U ? X: Y
-// No undefined
-// type NonNull<T> = T extends (undefined | null) ? never : T;
-type snun = string | null | undefined | number;
-let someValue: NonNullable<snun> = 'str';
-
-
-// First element
-type arr = [() => [number, string], number];
-
-type FirstReturnItemType<T> = T extends [infer U, ...unknown[]]
-    ? U extends (...args: unknown[]) => infer R ? R : never
-    : never
-
-let returnType: FirstReturnItemType<string> = 1;
-
-function fn(_a: number, b: number): () => true {
-    return () => true;
+type NotReadonly<T> = {
+    -readonly [key in keyof T]: T[key]
 }
 
-//  FunctionParamsAndReturn
+type user = {
+    readonly age: number;
+    name1: string
+}
 
-type NonFunction<T> = T extends Function ? never : T;
+let user: Partial<user> = {
+    age: 33,
+    name: 'Ihor'
+}
 
-type FunctionParamsAndReturn<T> = T extends (...args: infer Args) => infer R
-    ? NonFunction<Args[keyof Args]> | R
-    : never
+type RemoveByType<T, E> = {
+    [key in keyof T]: E extends T[key] ? never : T[key]
+}[keyof T]
 
-const c: FunctionParamsAndReturn<typeof fn> = Symbol();
+let someValue: RemoveByType<typeof user, number> = true;
 
-let a: number | (() => boolean);

@@ -11,7 +11,8 @@ export function average(...args: sn[]): string {
     let total: number = 0;
     for (const a of args) {
         if (isString(a)) {
-            total += parseInt(a, 10);
+            const v = parseInt(a, 10);
+            total += Number.isNaN(v) ? 0 : v;
             continue;
         }
         total += a;

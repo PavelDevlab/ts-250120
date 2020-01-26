@@ -1,25 +1,25 @@
-import { debounce, logErrorToSentry, logInputEventValue } from "./functions";
+import { checkTypeInRunTime } from "./functions";
 
-class Search {
-    public constructor(private el: HTMLInputElement) {
-        this.el.addEventListener('input', this.onSearch.bind(this))
-    }
 
-    @debounce(500)
-    @logInputEventValue
-    @logErrorToSentry
-    public onSearch(this: this, _e: any) {
+
+class UserAccount {
+    @checkTypeInRunTime
+    public firstName!: string;
+
+    public makeFullName(_surname: string): string {
+        return `${this.firstName} ${_surname}`
     }
 }
 
+const user = new UserAccount();
+console.log(user);
+// user.firstName = 'Ihor';
+// console.log(user.firstName )
+//
+// setTimeout(() => {
+//     (user.firstName as any) = 123123;
+// }, 5000);
 
-const input: HTMLInputElement = document.querySelector('input') as HTMLInputElement;
-const search = new Search(input);
-search.onSearch({target: {value: '1'}});
-search.onSearch({target: {value: '2'}});
-search.onSearch({target: {value: '3'}});
-search.onSearch({target: {value: '4'}});
-search.onSearch({target: {value: '5'}});
 
 
 

@@ -1,43 +1,13 @@
-// function average(a: number, b: number, c: number): string {
-//     const avg: number = (a + b + c) / 3;
-//     return `Average is ${avg}`;
-// }
-//
-// average(1, 2);
-// average(1, 2, 's');
-// const num: number = average(1, 2, 1);
 
-// function average(a: number, b?: number, c?: number): string {
-//     if (b === undefined) {
-//         b = 0;
-//     }
-//     if (c === undefined) {
-//         b = 0;
-//     }
-//     const avg: number = (a + b + c) / 3;
-//     return `Average is ${avg}`;
-// }
-//
-// average(1);
-// average(1, 2);
-// average(1, 2, 's');
-// const num: number = average(1, 2, 1);
-
-// function average(a: number, b: number = 0, c: number = 0): string {
-//     const avg: number = (a + b + c) / 3;
-//     return `Average is ${avg}`;
-// }
-//
-// average(1);
-// average(1, 2);
-// average(1, 2, 's');
-// const num: number = average(1, 2, 1);
 type sn = string | number;
 
 function isString(a: sn): a is string {
     return typeof a === 'string'
 }
 
+function average(a: number, b: string): string;
+function average(a: string, b: number): string;
+function average(a: number, b: number, c: number): string;
 function average(...args: sn[]): string {
     let total: number = 0;
     for (const a of args) {
@@ -47,10 +17,15 @@ function average(...args: sn[]): string {
         }
         total += a;
     }
-    const avg = total/args.length;
+    const avg = total / args.length;
     return `Average is ${avg}`;
 }
 
+average(1, '2');
+average('2', 1);
+average(1, 1, 1);
+average('1', '1');
+average('1', '2');
 average(1);
 average(1, 2);
 average(1, 2, 's');

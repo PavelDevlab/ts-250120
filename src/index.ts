@@ -12,19 +12,17 @@ function Tagged<BaseClass extends Constructable>(BC: BaseClass) {
     }
 }
 
-class BasePoint {
+abstract class BasePoint {
     public x: number;
     public y: number;
     private _z: number = 1;
 
-    public constructor({x, y}: { x: number, y: number }) {
+    protected constructor({x, y}: { x: number, y: number }) {
         this.x = x;
         this.y = y;
     }
 
-    public getSum(): number {
-        return this.x + this.y
-    }
+    public abstract getSum(): number ;
 
     public get z(): number {
         return this._z;
@@ -39,16 +37,36 @@ class BasePoint {
 let p1 = new BasePoint({x: 1, y: 1});
 
 
-class Point extends Timestamp(Tagged(BasePoint)) {
+class Point extends BasePoint {
     public constructor(coords: { x: number, y: number }) {
         super(coords);
     }
 
     public getSum(): number {
-        return super.getSum();
+        return this.x + this.y;
     }
 }
 
 let p2 = new Point({x: 1, y: 1});
 
 
+abstract class AbstractFormControl<T> {
+    public model: T;
+
+    public focus() {
+
+    }
+
+    public blur() {
+    }
+
+    public abstract updateModel(value: T): void;
+}
+
+class Input extends AbstractFormControl<string> {
+    public model: string = '';
+
+    public updateModel(value: string): void {
+        this.model = value;
+    }
+}

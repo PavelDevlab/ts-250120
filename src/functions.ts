@@ -1,23 +1,22 @@
-export type sn = string | number;
+export function savePersistance(target: any, key: string) {
+    let _val = target[key];
+    const localKey = `${target.constructor.name}_${key}`;
 
-function isString(a: sn): a is string {
-    return typeof a === 'string'
-}
-
-export function average(a: number, b: string): string;
-export function average(a: string, b: number): string;
-export function average(a: number, b: number, c: number): string;
-export function average(...args: sn[]): string {
-    let total: number = 0;
-    for (const a of args) {
-        if (isString(a)) {
-            const v = parseInt(a, 10);
-            total += Number.isNaN(v) ? 0 : v;
-            continue;
-        }
-        total += a;
+    const getter = () => {
+        console.log(`Get ${key} => ${_val}`);
+        return localStorage.getItem(localKey) ?? _val;
     }
-    const avg = total / args.length;
-    return `Average is ${avg}`;
-}
+    const setter = (newValuer: string) => {
+        console.log(typeof key);
+        console.log(`Set ${key} => ${newValuer}`);
+        _val = newValuer;
+        localStorage.setItem(localKey, newValuer);
+    }
 
+    Object.defineProperty(target, key, {
+        get: getter,
+        set: setter,
+        enumerable: true,
+        configurable: true
+    })
+}

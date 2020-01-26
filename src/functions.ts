@@ -1,22 +1,44 @@
-export function savePersistance(target: any, key: string) {
-    let _val = target[key];
-    const localKey = `${target.constructor.name}_${key}`;
-
-    const getter = () => {
-        console.log(`Get ${key} => ${_val}`);
-        return localStorage.getItem(localKey) ?? _val;
+export function debounce(ms: number) {
+    let timeId: number | null;
+    return (_target: object, _key: string, descriptor: PropertyDescriptor): PropertyDescriptor => {
+        const originalFn = descriptor.value;
+        return {
+            ...descriptor,
+            value: (...args: unknown[]) => {
+                if (timeId) {
+                    clearTimeout(timeId);
+                }
+                timeId = setTimeout(() => {
+                    originalFn(...args);
+                }, ms)
+            }
+        }
     }
-    const setter = (newValuer: string) => {
-        console.log(typeof key);
-        console.log(`Set ${key} => ${newValuer}`);
-        _val = newValuer;
-        localStorage.setItem(localKey, newValuer);
-    }
+}
 
-    Object.defineProperty(target, key, {
-        get: getter,
-        set: setter,
-        enumerable: true,
-        configurable: true
-    })
+export function logInputEventValue(_target: object, _key: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+    const originalFn = descriptor.value;
+    return {
+        ...descriptor,
+        value: (e: Event) => {
+            const value = (e.target as HTMLInputElement).value;
+            console.log(`Search => ${value}`);
+            originalFn(value);
+        }
+    }
+}
+
+export function logErrorToSentry(_target: object, _key: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+    const originalFn = descriptor.value;
+    return {
+        ...descriptor,
+        value: (...args: unknown[]) => {
+            try {
+                originalFn(...args);
+            } catch (err) {
+                console.log(err);
+                // send to sentry
+            }
+        }
+    }
 }

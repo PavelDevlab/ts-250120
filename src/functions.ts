@@ -1,18 +1,29 @@
 import 'reflect-metadata';
 
-export function checkTypeInRunTime(_target: object, key: string,): void {
-    const {name: type} = Reflect.getMetadata('design:type', _target, key);
-    console.log(`${key} type: ${type}`);
-    let val: any;
-    Object.defineProperty(_target, key, {
-        get(): any {
-            return val;
-        },
-        set(newValue: any): void {
-            if (typeof newValue !== type.toLowerCase()) {
-                throw new Error(`type for ${key} is not ${type}. You tried to set ${typeof newValue} `)
+const RANGE_KEY: unique symbol = Symbol('RANGE_KEY');
+
+export function Validate(target: object, key: string, desc: PropertyDescriptor): void {
+    const originalValue = desc.value;
+    desc.value = (...agrs: unknown[]) => {
+        const existingRange = Reflect.getMetadata(RANGE_KEY, target, key) ?? {};
+        for (const [paramIndex, range] of Object.entries(existingRange)) {
+            const [min, max] = range as [number, number];
+            const paramValue = agrs[Number(paramIndex)];
+            if (Number(paramValue) < min || Number(paramValue) > max) {
+                throw new Error(`Error in ${target.constructor.name} instance. Parameter of method ${key} on position ${paramIndex}
+             out of range ${[min, max]}
+             `)
             }
-            val = newValue;
         }
-    })
+        return originalValue(...agrs)
+    }
 }
+
+export function RangeParameter(min: number, max: number): ParameterDecorator {
+    return (target: object, key: string | symbol, index: number) => {
+        const existingRange = Reflect.getMetadata(RANGE_KEY, target, key) ?? {};
+        existingRange[index] = [min, max];
+        Reflect.defineMetadata(RANGE_KEY, existingRange, target, key);
+    }
+}
+

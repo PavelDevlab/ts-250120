@@ -1,25 +1,22 @@
-import { checkTypeInRunTime } from "./functions";
+import { Validate, RangeParameter } from "./functions";
 
 
-
-class UserAccount {
-    @checkTypeInRunTime
-    public firstName!: string;
-
-    public makeFullName(_surname: string): string {
-        return `${this.firstName} ${_surname}`
+export class Calculator {
+    @Validate
+    public updatePercentage(
+        @RangeParameter(0, 100) oldValue: number,
+        @RangeParameter(0, 100) newValue: number,
+    ) {
+        console.log(oldValue, newValue)
     }
 }
 
-const user = new UserAccount();
-console.log(user);
-// user.firstName = 'Ihor';
-// console.log(user.firstName )
-//
-// setTimeout(() => {
-//     (user.firstName as any) = 123123;
-// }, 5000);
+const calc = new Calculator();
 
+calc.updatePercentage(1, 50);
+setTimeout(() => {
+    calc.updatePercentage(50, 190);
+}, 5000)
 
 
 
